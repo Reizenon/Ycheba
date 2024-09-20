@@ -1,0 +1,28 @@
+console.log ('введите x, y');
+var x = prompt();
+var y = prompt();
+var count = 0;
+//quadr
+if (x <= 1 && x >= -1 && y <= 1 && y >= -1)
+count += 1;
+//circle
+if (x**2 + y**2 <= 1)
+count+=2;
+//romb
+if (Math.abs(x) + Math.abs(y) <= 1)
+count+=3;
+//star
+if (y <= Math.sqrt(x**2 - 1) && y>= -Math.sqrt(x** 2 - 1 ))
+count+=4;
+if ((x==0) && (y==0)) 
+count+=10;
+console.log ("Вы набрали: "+ count);
+
+
+
+
+
+
+
+
+
