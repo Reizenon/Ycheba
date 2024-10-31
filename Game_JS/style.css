@@ -1,0 +1,14 @@
+#roomImage {
+    width: 700px;
+    height: 400px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+
+button {
+    padding: 10px 20px;
+    margin: 5px;
+    background-color: #007BFF;
+    color: white;
+}
