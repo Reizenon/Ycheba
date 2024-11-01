@@ -1,0 +1,112 @@
+var current = 'start';
+
+function loadUserStat()
+{
+    document.getElementById('userName').innerText = 'Имя: ' + user.name;
+    document.getElementById('userHp').innerText = 'Здоровье: ' + user.hp;
+    document.getElementById('userMoney').innerText = 'Деньги: ' + user.money;
+}
+
+var user = {
+    name: 'Данил',
+    hp: 100,
+    money: 0,
+}
+
+function displayMessage(message)
+{
+    var messageElement = document.getElementById('message');
+    messageElement.innerHTML = message;
+}
+
+function render()
+{
+    var room = ROOMS[current];
+    document.getElementById('title').innerHTML = room.title;
+    document.getElementById('description').innerHTML = room.description;
+    document.getElementById('roomImage').src = room.img;
+    var exits = document.getElementById('exits');
+    exits.innerHTML = '';
+    
+
+    loadUserStat();
+    for (var i = 0; i < room.exits.length; i++)
+    {
+        hitPerStep();
+        (function (i)
+        {
+            var button = document.createElement('button');
+            button.innerHTML = ROOMS[room.exits[i]].title;
+            exits.appendChild(button);
+            button.addEventListener('click', function ()
+            {
+                current = room.exits[i];
+                displayMessage('');
+                render();
+            });
+        })(i);
+    }
+
+    if (current === 'start' && !room.moneyFound)
+    {
+        var findMoneyButton = document.createElement('button');
+        findMoneyButton.innerHTML = "Найти деньги";
+        exits.appendChild(findMoneyButton);
+        findMoneyButton.addEventListener('click', function ()
+        {
+            ROOMS.start.findMoney();
+        });
+    }
+
+    if (current === 'cafeteria')
+    {
+        renderButton('Покушать (10)', function eat (price)
+        {
+            if (user.money > 10)
+            {
+                user.money -= 10;
+                user.hp += 20;
+                displayMessage('Ваше здоровье увеличено на (20) текущее здоровье ' + (user.hp));
+            }
+            else
+            {
+                displayMessage("Недостаточно денег для покупки еды.");
+                return;
+            }
+            
+            loadUserStat();
+        });
+    }
+}
+
+function renderButton (text, onClick)
+{
+    var button = document.createElement('button');
+    button.innerHTML = text;
+    button.addEventListener('click', onClick);
+    document.getElementById('exits').appendChild(button);
+}
+
+function hitPerStep()
+{
+    user.hp -= 2;
+}
+
+function death()
+{
+    displayMessage ('Конец игры!');
+}
+
+function resetGame()
+{
+    user.hp = 100;
+    user.money = 0;
+    current = 'start';
+    ROOMS.start.foundMoney = false;
+    render();
+}
+
+window.onload = function ()
+{
+    render();
+}
